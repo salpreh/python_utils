@@ -1,0 +1,9 @@
+# Ignore python byte-compiled
+__pycache__/
+workspace/__pycache__
+
+# Ignore venv folders
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
