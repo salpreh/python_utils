@@ -7,3 +7,6 @@ Include/
 Lib/
 Scripts/
 pyvenv.cfg
+
+# Ignore configuration files
+workspace/config-files/*.ini
