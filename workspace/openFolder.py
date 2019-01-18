@@ -3,7 +3,7 @@ import configparser
 from pathlib import Path
 import sys
 
-# Path Routes
+# Global Vars
 AVAILABLE_ROUTES = {}
 CONFIG_ROUTE = './config-files/openFolder.ini'
 
