@@ -3,7 +3,6 @@ import os
 import re
 from pathlib import Path
 
-inputFolderPath = Path("C:\\Users\\Salva\\Desktop\\Plantillas Navidad\\Rename-pls\\CALSOBREM\\EU03")
 INC_COUNTER = 1
 MULTIFILE = True
 
@@ -12,6 +11,11 @@ def genNewName(newName):
     """
     Genera el nuevo nombre de la plantilla expandiendo las etiquetas especiales
     que pueda contener
+
+    Etiquetas:
+        * (INC): Expande la etiqueta con un contador que incrementa cada vez que renombra un fichero
+            en la ejecución actual. Ficheros con mismo nombre pero diferente extensión tendrán el mismo
+            número.
     """
     increment_tag = '(INC)'
     if increment_tag in newName:
