@@ -1,4 +1,4 @@
-# atlUtils
+# python_utis
 
 A collection of python scripts and utilities.
 
@@ -36,10 +36,14 @@ the size of one side in pixels _(keep in mind that 100px at 254ppp is equal at 1
 
 * ***renameFiles.py***: Renames files in a folder. Matches a keyword that must contain the file/s and replaces it for another word.
 
-* ***openFolder***: Opens a folder in the explorer using a nickname _(only for Windows os)_.  Requires a config file with the nickname and the path to the folder. More details on the _Readme.md_ inside the config folder.
+* ***openFolder***: Opens a folder in the explorer using a nickname _(only for Windows os)_.  Requires a config file with the nickname and the path to the folder. More details in the _Readme.md_ inside the config folder.
 
 * ***listLacProperty.py***: List recursively keys and values from`.ini` files. Uses regular expresions to select sections and keys.
 
 * ***changeLacValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields.
 
-* ***addLacValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields. The script don't overwrite by default if the key already exists use ***-f*** flag. To explore recursively the sub-directories use ***-r*** flag.
+* ***addLacValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields. The script don't overwrite by default if the key already exists use **'-f'** flag. To explore recursively the sub-directories use **'-r'** flag.
+
+* ***compareFiles***: Compare if two files are exactly the same.
+
+* ***zipIt***: Generates a zip file from a folder. You can use the flag **'-p'** to use a password for the zip. Additionaly you can load a password from a config file using an id with **'-i'** flag. The config file is an `.ini` file with pairs id/pass. More info in _Readme.md_ file inside config folder. (The script requires 7z installed)
