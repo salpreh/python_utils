@@ -30,7 +30,7 @@ pip install -r requirements.txt
 * ***checkImages.py***: Check and list corrupted _.jpg_ images.
 
 * ***resizeImages.py***: Resizes images keeping the proportions. The script asks for
-the size of one side in pixels _(keep in mind that 100px at 254ppp is equal at 1cm, so for resize one side of the image to 15cm the input is 1500)_.
+the size of one side in millimeters and resized at 254ppp of resolution by default. Use the flag **'-r'** to change the output resolution.
 
 * ***excelLib.py***: Library to generate an spreadsheet from python lists _(Read methods pydoc to more details)_.
 

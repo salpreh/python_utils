@@ -3,31 +3,47 @@ import re
 from pathlib import Path
 from PIL import Image, ImageFile
 
+# Global vars
+INCH_IN_MM = 25.4
+VALID_EXTENSIONS = ['.jpg', '.JPG', '.jpeg', '.JPEG']
+
+def MMtoPx(sizeMM, ppi=254):
+    return round(sizeMM * ppi / INCH_IN_MM)
+
 if __name__ == "__main__":
 
-    path_str = input("Ruta a carpeta de imágenes: ")
+    if (len(sys.argv) > 2 and sys.argv[1] == '-r'):
+        try:
+           ppi  = int(sys.argv[2])
+        except ValueError:
+            print("Error casting resolution input number: {}".format(sys.argv[2]))
+
+    else:
+        ppi = 254
+
+    path_str = input("Path to images folder: ")
     path = Path(path_str)
 
-    width_str = input("Anchura final: ")
+    width_str = input("Final_width (MM): ")
     wanted_width = int(width_str)
 
     orientation = input("Horizontal/Veritcal (h/v): ")
     vertical = False
     orientation = orientation[0]
     if orientation not in "hv":
-        print("Valores validos orientación: h (Horizontal), v (Vertical)")
+        print("Valid values: h (Horizontal), v (Vertical)")
 
     elif orientation == 'v':
         vertical = True
 
     if not path.exists() or not path.is_dir():
-        print("La carpeta no existe: {}".format(path.resolve()))
+        print("Folder not found: {}".format(path.resolve()))
         sys.exit(1)
 
-    images = [f for f in path.iterdir() if f.name.endswith(".jpg")]
+    images = [f for f in path.iterdir() if f.suffix in VALID_EXTENSIONS]
     corruptedImages = []
     ImageFile.LOAD_TRUNCATED_IMAGES = True
-    print("> Comprobando ficheros jpg ...\n")
+    print("> Checking jpg files ...\n")
     for image in images:
         try:
             imageEditor = Image.open(image.resolve())
@@ -36,16 +52,17 @@ if __name__ == "__main__":
 
             # Image resize
             if vertical and orWidth > orHeight or not vertical and orWidth < orHeight:
-                final_height = wanted_width
-                final_width = round(orWidth * final_height / orHeight)
+                final_height = MMtoPx(wanted_width, ppi)
+                final_width = MMtoPx(orWidth * wanted_width / orHeight, ppi)
 
             else:
-                final_width = wanted_width
-                final_height = round(orHeight * final_width / orWidth)
+                final_width = MMtoPx(wanted_width, ppi)
+                final_height = MMtoPx(orHeight * wanted_width / orWidth, ppi)
+                print("{}x{} -> Calc data: orH {}, finalw {}, orWidth {}".format(final_width, final_height, orHeight, final_width, orWidth))
 
             newImage = imageEditor.resize((final_width, final_height), Image.ANTIALIAS)
             newImage.save(image.resolve(), "JPEG", quality=100)
-            print("{} redimensionada".format(image.name))
+            print("{} resized".format(image.name))
 
         except IOError:
             corruptedImages.append(image.name)
@@ -66,6 +83,6 @@ if __name__ == "__main__":
 
     # List corrupted images
     if len(corruptedImages) > 0:
-        print("\n### REPROTE:{} imágenes dañadas ###\n".format(len(corruptedImages)))
+        print("\n### REPROTE:{} corrupted jpg images ###\n".format(len(corruptedImages)))
         for i, name in enumerate(corruptedImages, start=1):
 	           print("{:03d}: {}".format(i, name))
