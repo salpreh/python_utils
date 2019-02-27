@@ -1,11 +1,12 @@
-# -- encoding: utf8 --
+# -- encoding: utf-8 --
 import configparser
 import sys
 import re
 from pathlib import Path
 
 # Global vars
-LAC_FILE_EXTENSIONS = ['.lac', '.template', '.config']
+LAC_FILE_EXTENSIONS = ['.lac', '.template', '.config', '.ini']
+RECURSIVE = True
 
 def pathFromParent(parent_folder, current_folder):
     parent_parts = parent_folder.parts
@@ -19,6 +20,9 @@ def pathFromParent(parent_folder, current_folder):
 
 if __name__ == "__main__":
 
+    # Print current searched file extensions
+    print("Extensiones de ficheros validos: {}\n\n".format(LAC_FILE_EXTENSIONS))
+
     # Root folder input
     base_folder = input('Carpeta raiz: ')
     base_folder_path = Path(base_folder)
@@ -27,7 +31,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # Section RE input
-    section_re_str = input('Expresión regular para sección: ')
+    section_re_str = input('Expresión regular para sección (opcional): ')
     if not section_re_str:
         section_re_str = '.*'
 
@@ -37,6 +41,9 @@ if __name__ == "__main__":
     field_re_str = input('Expresión regular para campo: ')
     if not field_re_str:
         field_re_str = '.*'
+
+    # New value input
+    new_value = input('Nuevo valor: ')
 
     field_regex = re.compile(field_re_str, re.IGNORECASE)
 
@@ -48,19 +55,30 @@ if __name__ == "__main__":
         for file_path in current_folder_path.iterdir():
 
             # If it is a folder add it to pending
-            if file_path.is_dir():
+            if file_path.is_dir() and RECURSIVE:
                 pending_folders.append(file_path)
                 continue;
 
             # If it is a lac file analize it
             elif file_path.suffix in LAC_FILE_EXTENSIONS:
-                print("{2}{0} {1} {0}".format('#'*12, file_path, '\n'*2))
+                changed = False
+                print("{2}{0} {1} {0}".format('#'*6, file_path, '\n'*2))
                 config = configparser.ConfigParser()
+                config.optionxform = str
                 config.read(file_path)
                 sections = [sec for sec in config.sections() if section_regex.match(sec)]
                 for section in sections:
                     print("{}{}[{}]".format('\n', ' '*2, section))
 
                     for field in config[section]:
+
+                        # Set matched section - field value
                         if field_regex.match(field):
-                            print("{}{} = {}".format(' '*4, field.upper(), config[section][field]))
+                            changed = True
+                            config[section][field] = new_value
+                            print("{}{} value changed to '{}''".format(' '*4, field.upper(), config[section][field]))
+
+                # Save config file if it has been changed
+                if changed:
+                    with open(file_path.resolve(), 'w') as configFile:
+                        config.write(configFile, space_around_delimiters=False)

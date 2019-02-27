@@ -1,4 +1,4 @@
-# -- encoding: utf8 --
+# -- encoding: utf-8 --
 import configparser
 import sys
 import re
@@ -6,7 +6,8 @@ from pathlib import Path
 
 # Global vars
 LAC_FILE_EXTENSIONS = ['.lac', '.template', '.config', '.ini']
-RECURSIVE = True
+RECURSIVE = False
+OVERWRITE = False
 
 def pathFromParent(parent_folder, current_folder):
     parent_parts = parent_folder.parts
@@ -38,14 +39,21 @@ if __name__ == "__main__":
     section_regex = re.compile(section_re_str)
 
     # Field RE input
-    field_re_str = input('Expresión regular para campo: ')
-    if not field_re_str:
-        field_re_str = '.*'
+    field_str = input('Nuevo campo: ')
+    if not field_str:
+        print('Es necesario introducir un nombre para el nuevo campo')
+        sys.exit(0)
 
     # New value input
-    new_value = input('Nuevo valor: ')
+    new_value = input('Valor campo: ')
 
-    field_regex = re.compile(field_re_str, re.IGNORECASE)
+    # Check recursive flag
+    if len(sys.argv) > 1 and '-r' in sys.argv[1:]:
+        RECURSIVE = True
+
+    # Check overwrite flag
+    if len(sys.argv) > 1 and '-f' in sys.argv[1:]:
+        OVERWRITE = True
 
     # List and process LAC files
     pending_folders = [base_folder_path]
@@ -70,13 +78,15 @@ if __name__ == "__main__":
                 for section in sections:
                     print("{}{}[{}]".format('\n', ' '*2, section))
 
-                    for field in config[section]:
+                    # If field already exists and overwrite falg wasn't passed jump to next section
+                    if config.has_option(section, field_str) and not OVERWRITE:
+                        print("Field '{}={}' already eixsts (overwrite disabled)".format(field_str, config[section][field_str]))
+                        continue
 
-                        # Set matched section - field value
-                        if field_regex.match(field):
-                            changed = True
-                            config[section][field] = new_value
-                            print("{}{} value changed to '{}''".format(' '*4, field.upper(), config[section][field]))
+                    # Add new field into section
+                    changed = True
+                    config[section][field_str] = new_value
+                    print("Field added: {}={}".format(field_str, config[section][field_str]))
 
                 # Save config file if it has been changed
                 if changed:

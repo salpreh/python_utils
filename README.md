@@ -38,11 +38,11 @@ the size of one side in millimeters and resized at 254ppp of resolution by defau
 
 * ***openFolder***: Opens a folder in the explorer using a nickname _(only for Windows os)_.  Requires a config file with the nickname and the path to the folder. More details in the _Readme.md_ inside the config folder.
 
-* ***listLacProperty.py***: List recursively keys and values from`.ini` files. Uses regular expresions to select sections and keys.
+* ***listIniValues.py***: List recursively keys and values from`.ini` files. Uses regular expresions to select sections and keys.
 
-* ***changeLacValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields.
+* ***changeIniValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields.
 
-* ***addLacValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields. The script don't overwrite by default if the key already exists use **'-f'** flag. To explore recursively the sub-directories use **'-r'** flag.
+* ***addIniValue.py***: Similar to `listLacProperty.py` script. Use a regular expresión to select section and key and then input the new value for the matched fields. The script don't overwrite by default if the key already exists use **'-f'** flag. To explore recursively the sub-directories use **'-r'** flag.
 
 * ***compareFiles***: Compare if two files are exactly the same.
 
