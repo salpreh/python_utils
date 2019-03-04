@@ -2,11 +2,8 @@
 __pycache__/
 workspace/__pycache__
 
-# Ignore venv folders
-Include/
-Lib/
-Scripts/
-pyvenv.cfg
+# Venv folder
+venv/
 
 # Ignore configuration files
 workspace/config-files/*.ini

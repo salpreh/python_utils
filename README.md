@@ -6,7 +6,7 @@ A collection of python scripts and utilities.
 ### Setup instructions
 Clone the repository and initialize a python virtual enviroment in the repo folder:
 ```sh
-pythom -m venv [repoFolder]
+pythom -m venv venv
 ```
 
 Acivate the virtual enviroment and use the `requirements.txt` file to install the required libraries locally to the enviroment
@@ -14,13 +14,13 @@ Acivate the virtual enviroment and use the `requirements.txt` file to install th
 **Windows:**
 ```sh
 cd [repoFolder]
-Scripts/activate.bat
+venv/Scripts/activate.bat
 pip install -r requirements.txt
 ```
 **Shell:**
 ```sh
 cd [repoFolder]
-source bin/activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 (Additional info on python [virtual enviroments](https://docs.python.org/3/tutorial/venv.html) and [documentation](https://docs.python.org/3/library/venv.html))
